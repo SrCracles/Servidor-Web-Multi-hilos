@@ -1,6 +1,8 @@
 import java.io.* ;
 import java.net.* ;
 import java.util.* ;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public final class ServidorWeb {
         public static void main(String argv[]) throws Exception
@@ -11,6 +13,9 @@ public final class ServidorWeb {
         // Estableciendo el socket de escucha.
         ServerSocket socketdeEscucha = new ServerSocket(puerto);
         System.out.println("Servidor iniciado"); 
+
+        //ThreadPool
+        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(2);
 
        // Procesando las solicitudes HTTP en un ciclo infinito.
        while (true) {
@@ -26,8 +31,11 @@ public final class ServidorWeb {
                 // Crea un nuevo hilo para procesar la solicitud.
                 Thread hilo = new Thread(solicitud);
 
-                // Inicia el hilo.
-                hilo.start();
+                executor.execute(hilo);
+
+
+                // Inicia el hilo ya no es necesario.
+                // hilo.start();
         }
 }
 }
